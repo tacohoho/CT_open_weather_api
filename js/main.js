@@ -16,12 +16,17 @@ const create_row = (high, low, forecast, humidity) => {
 
 const load_data = async () => {
     // delete previous data
-    // document.getElementsByClassName("remove").remove();
+    removeArr = document.getElementsByClassName("remove");
+    if (removeArr.length > 0) {
+        removeArr[0].remove();
+    }
     let city = document.querySelector('#city');
-    console.log(city.value)
-    let response = await axios.get(`api.openweathermap.org/data/2.5/weather?q=${city.value}&appid=210bd89c9bef633706a4a6a0f3181de5`);
-    console.log(response);
-    // create_row(response.main.temp_max, response.main.temp_min, response.weather[0].main, response.main.humidity)
+    // let response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city.value}&appid=210bd89c9bef633706a4a6a0f3181de5`);
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city.value}&appid=210bd89c9bef633706a4a6a0f3181de5&units=imperial`)
+        .then(response => response.json())
+        .then(data => {
+            create_row(data.main.temp_max, data.main.temp_min, data.weather[0].main, data.main.humidity)
+        })
 }
 
 const form = document.querySelector('#locationDataForm')
